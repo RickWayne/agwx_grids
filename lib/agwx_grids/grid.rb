@@ -220,5 +220,12 @@ class Grid
   def layer(doy)
     @layers[doy]
   end
+    
+  def latitude_for(index)
+    mD.yStart + (index * mD.yIncr)
+  end
   
+  def longitude_for(index)
+    mD.xStart + (index * mD.xIncr)
+  end
 end

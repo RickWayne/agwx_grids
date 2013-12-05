@@ -34,6 +34,18 @@ class TestAgwxGrid  < Test::Unit::TestCase
     assert_equal(Array, @grid.layer(DOY).row(1).class)
     assert_equal(VAL, @grid.layer(DOY).row(1)[5])
   end
+  
+  def test_y_latitude
+    lat_start = @grid.mD.yStart
+    lat_incr = @grid.mD.yIncr
+    assert_in_delta(lat_start + 3 * lat_incr, @grid.latitude_for(3), 2 ** -20)
+  end
+  
+  def test_x_longitude
+    long_start = @grid.mD.xStart
+    long_incr = @grid.mD.xIncr
+    assert_in_delta(long_start + 3 * long_incr, @grid.longitude_for(3), 2 ** -20)
+  end
 end
 # begin # test the Grid class
 #    puts "====== initializing a grid =========="
