@@ -1,6 +1,8 @@
 require "test/unit"
 require "agwx_grids"
 
+include AgwxGrids
+
 DOY = 7
 ROW = 1
 COL = 5

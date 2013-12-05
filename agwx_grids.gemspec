@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = AgwxGrids::VERSION
   spec.authors       = ["RickWayne"]
   spec.email         = ["fewayne@wisc.edu"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{UW Soils Ag Weather grid data format (X by Y by DOY) }
+  spec.summary       = %q{UW Soils Ag Weather grid data format (X by Y by DOY) }
   spec.homepage      = ""
   spec.license       = "MIT"
 
