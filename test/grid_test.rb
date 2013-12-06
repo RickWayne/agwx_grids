@@ -48,6 +48,17 @@ class TestAgwxGrid  < Test::Unit::TestCase
     long_incr = @grid.mD.xIncr
     assert_in_delta(long_start + 3 * long_incr, @grid.longitude_for(3), 2 ** -20)
   end
+  
+  def test_each_with_doy
+    layers = []
+    doys = []
+    @grid.each_with_doy do |layer,doy|
+      layers << layer
+      doys << doy
+    end
+    expected=(1..313).to_a + (315..365).to_a # DOY 314 is missing in the test grid
+    doys.each_with_index { |actual,ii| assert_equal(expected[ii], actual, "ii: #{ii}, expected: #{expected[ii-5..ii+5].inspect}; actual: #{doys[ii-5..ii+5].inspect}\n#{@grid.layer_list.inspect}") }
+  end
 end
 # begin # test the Grid class
 #    puts "====== initializing a grid =========="

@@ -211,6 +211,10 @@ module AgwxGrids
     def each
       @layers.each { |layer| yield layer }
     end
+    
+    def each_with_doy
+      @layers.keys.sort.each {|doy| yield [layer(doy),doy]}
+    end
   
     def layer_list
       @layers.keys
