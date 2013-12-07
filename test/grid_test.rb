@@ -59,6 +59,21 @@ class TestAgwxGrid  < Test::Unit::TestCase
     expected=(1..313).to_a + (315..365).to_a # DOY 314 is missing in the test grid
     doys.each_with_index { |actual,ii| assert_equal(expected[ii], actual, "ii: #{ii}, expected: #{expected[ii-5..ii+5].inspect}; actual: #{doys[ii-5..ii+5].inspect}\n#{@grid.layer_list.inspect}") }
   end
+  
+  def test_at_by_index
+    vals = @grid.at_by_index(10,10)
+    assert_equal(Hash, vals.class)
+    assert_equal(364, vals.keys.size)
+    assert_equal(-19.54, vals[1])
+  end
+  
+  def test_at_by_long_lat
+    latitude = @grid.latitude_for(5)
+    longitude = @grid.longitude_for(6)
+    vals = @grid.at_by_long_lat(longitude,latitude)
+    assert_equal(364, vals.keys.size)
+    assert_equal(-17.42, vals[1])    
+  end
 end
 # begin # test the Grid class
 #    puts "====== initializing a grid =========="

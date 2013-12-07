@@ -2,13 +2,13 @@
   #    are designed for data which is easily maintained as a 3D matrix. The following is 
   #    a typical top part of a Grid file:
   #  
-  #  7 8 245			[XNo  YNo  ZNo]
-  #   -93.000000 -87.000000	[XStart  XEnd]
-  #   42.330002 47.000000	[YStart  YEnd]
-  #   121 365 1			[ZStart  ZEnd  ZInc]
-  #   -99.000000 0		[BadVal  #Decimal_Places]
-  #   121			[ZIndex]
-  #   8 10 7 4 4 4 4		[Grid Values]		
+  #  7 8 245      [XNo  YNo  ZNo]
+  #   -93.000000 -87.000000  [XStart  XEnd]
+  #   42.330002 47.000000  [YStart  YEnd]
+  #   121 365 1      [ZStart  ZEnd  ZInc]
+  #   -99.000000 0    [BadVal  #Decimal_Places]
+  #   121      [ZIndex]
+  #   8 10 7 4 4 4 4    [Grid Values]    
   #   7 6 6 4 5 4 4
   #   6 8 8 4 4 4 3
   #   7 8 9 6 4 3 3
@@ -214,6 +214,20 @@ module AgwxGrids
     
     def each_with_doy
       @layers.keys.sort.each {|doy| yield [layer(doy),doy]}
+    end
+    
+    def at_by_index(longitude_index,latitude_index)
+      @layers.inject({}) do |hash,arr|
+        doy = arr[0]
+        layer = arr[1]
+        hash.merge doy => layer.get(longitude_index,latitude_index)
+      end
+    end
+    
+    def at_by_long_lat(long,lat)
+      @layers.keys.inject({}) do |hash,doy|
+        hash.merge doy => get(long,lat,doy)
+      end
     end
   
     def layer_list
