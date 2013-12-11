@@ -65,7 +65,7 @@ module AgwxGrids
 
     def calcYIncr
       if @yStart != nil && @yEnd != nil && @yDim != nil then
-        @yIncr = (@yEnd - @yStart) / @yDim
+        @yIncr = (@yEnd - @yStart) / (@yDim - 1)
       end
     end
 
@@ -159,25 +159,34 @@ module AgwxGrids
       end
     end
   
+    # Find the nearest index to the given coord (params in real space, return is a zero-based index)
+    def nearest(coord,start,incr)
+      # convert coord to a lower-bound index (i.e. truncating integer conversion)
+      trunc = ((coord - start)/incr).to_i
+      # Does "trunc" the index of the closest real-space coord, or the next one up?
+      coord - (start + incr*trunc) > incr / 2.0 ? trunc + 1 : trunc
+    end
+    
+    # Convert coordinates in real XY space to indices. Note that Z is sort-of a real-space coord, but
+    # represents a quantized there-or-not value like a DOY, not a scalar.
     def realToIndex(x,y,z) 
-      @myX = ((x-@mD.xStart)/@mD.xIncr).to_i
-      @myY = ((y-@mD.yStart)/@mD.yIncr).to_i
-      @myZ = z # ((z-@mD.zStart)/@mD.zIncr).to_i
-      # puts "realToIndex: x #{x}, xStart #{@mD.xStart}, xIncr #{@mD.xIncr} myX #{@myX}; y #{y}, myY #{@myY} z #{z}, myZ #{@myZ}"
-      [@myX,@myY,@myZ]
+      @my_ii = nearest(x,@mD.xStart,@mD.xIncr)
+      @my_jj = nearest(y,@mD.yStart,@mD.yIncr)
+      @my_doy = z
+      # puts "realToIndex: x #{x}, xStart #{@mD.xStart}, xIncr #{@mD.xIncr} myX #{@my_ii}; y #{y}, myY #{@my_jj} z #{z}, myZ #{@my_doy}"
+      [@my_ii,@my_jj,@my_doy]
     end
   
     def get(x,y,z)
       # puts "get #{x},#{y},#{z}"
       # puts "xStart=#{@mD.xStart}, yStart=#{@mD.yStart}, zStart=#{@mD.zStart}"
-      # note that this just truncates; it should round to center of cell!
       realToIndex(x,y,z)
-      # puts "@myX=#{@myX}, @myY=#{@myY}, @myZ=#{@myZ}"
-      # puts "#{@layers[@myZ]}"
-      if @layers[@myZ] == nil
+      # puts "@my_ii=#{@my_ii}, @my_jj=#{@my_jj}, @my_doy=#{@my_doy}"
+      # puts "#{@layers[@my_doy]}"
+      if @layers[@my_doy] == nil
           nil
       else
-          val = @layers[@myZ].get(@myX,@myY)
+          val = @layers[@my_doy].get(@my_ii,@my_jj)
           val == mD.badVal ? nil : val
       end
     end
@@ -201,7 +210,7 @@ module AgwxGrids
         if layer == nil
             yield nil
         else
-          val = layer.get(@myX,@myY)
+          val = layer.get(@my_ii,@my_jj)
           val = nil if val == mD.badVal
           yield val
         end

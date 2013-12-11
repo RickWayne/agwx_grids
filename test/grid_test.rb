@@ -49,6 +49,13 @@ class TestAgwxGrid  < Test::Unit::TestCase
     assert_in_delta(long_start + 3 * long_incr, @grid.longitude_for(3), 2 ** -20)
   end
   
+  def test_by_long_lat
+    assert_equal(-17.03, @grid.get(-96.86,42.0,1))
+    assert_equal(-17.01, @grid.get(-96.45,42.0,1))
+    assert_equal(-16.85, @grid.get(-96.86,42.4,1))
+    assert_equal(-16.82, @grid.get(-96.45,42.4,1))
+    
+  end
   def test_each_with_doy
     layers = []
     doys = []
@@ -68,11 +75,19 @@ class TestAgwxGrid  < Test::Unit::TestCase
   end
   
   def test_at_by_long_lat
+    assert_equal(0.4, @grid.mD.yIncr)
     latitude = @grid.latitude_for(5)
+    assert_equal(44.0, latitude)
     longitude = @grid.longitude_for(6)
+    assert_equal(-95.6, longitude)
     vals = @grid.at_by_long_lat(longitude,latitude)
     assert_equal(364, vals.keys.size)
     assert_equal(-17.42, vals[1])    
+  end
+  
+  def test_nearest
+    assert_equal(0, @grid.nearest(-97.81,-98.0,0.4))
+    assert_equal(1, @grid.nearest(-97.79,-98.0,0.4))
   end
 end
 # begin # test the Grid class
