@@ -86,8 +86,8 @@ class TestAgwxGrid  < Test::Unit::TestCase
   end
   
   def test_nearest
-    assert_equal(0, @grid.nearest(-97.81,-98.0,0.4))
-    assert_equal(1, @grid.nearest(-97.79,-98.0,0.4))
+    assert_equal(0, Grid.nearest(-97.81,-98.0,0.4))
+    assert_equal(1, Grid.nearest(-97.79,-98.0,0.4))
   end
 end
 # begin # test the Grid class

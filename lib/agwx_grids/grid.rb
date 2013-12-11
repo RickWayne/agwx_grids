@@ -160,7 +160,7 @@ module AgwxGrids
     end
   
     # Find the nearest index to the given coord (params in real space, return is a zero-based index)
-    def nearest(coord,start,incr)
+    def self.nearest(coord,start,incr)
       # convert coord to a lower-bound index (i.e. truncating integer conversion)
       trunc = ((coord - start)/incr).to_i
       # Does "trunc" the index of the closest real-space coord, or the next one up?
@@ -170,8 +170,8 @@ module AgwxGrids
     # Convert coordinates in real XY space to indices. Note that Z is sort-of a real-space coord, but
     # represents a quantized there-or-not value like a DOY, not a scalar.
     def realToIndex(x,y,z) 
-      @my_ii = nearest(x,@mD.xStart,@mD.xIncr)
-      @my_jj = nearest(y,@mD.yStart,@mD.yIncr)
+      @my_ii = self.nearest(x,@mD.xStart,@mD.xIncr)
+      @my_jj = self.nearest(y,@mD.yStart,@mD.yIncr)
       @my_doy = z
       # puts "realToIndex: x #{x}, xStart #{@mD.xStart}, xIncr #{@mD.xIncr} myX #{@my_ii}; y #{y}, myY #{@my_jj} z #{z}, myZ #{@my_doy}"
       [@my_ii,@my_jj,@my_doy]
